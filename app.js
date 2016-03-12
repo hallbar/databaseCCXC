@@ -13,6 +13,14 @@ var pool = mysql.createPool({
 	database: 'student'
 });
 
+var createString = "CREATE TABLE workouts(" +
+	"id INT PRIMARY KEY AUTO_INCREMENT," +
+	"name VARCHAR(255) NOT NULL," +
+	"reps INT," +
+	"weight INT," +
+	"date DATE," +
+	"lbs BOOLEAN)";
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 3000);
@@ -20,15 +28,19 @@ app.set('port', 3000);
 app.get('/db', function(req, res, next) {
 	var context = {};
 
-	pool.query('SELECT * FROM student', function(err, row, fields) {
-		if(err) {
-			next(err);
-			return;
-		}
-
-		context.results = JSON.stringify(rows);
+	pool.query(createString, function(err){
 		res.render('/db');
 	});
+
+	// pool.query('SELECT * FROM student', function(err, row, fields) {
+	// 	if (err) {
+	// 		next(err);
+	// 		return;
+	// 	}
+
+	// 	context.results = JSON.stringify(rows);
+	// 	res.render('/db');
+	// });
 });
 
 
