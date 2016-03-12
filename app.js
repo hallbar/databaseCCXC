@@ -28,16 +28,38 @@ app.set('port', 3000);
 app.get('/db', function(req, res, next) {
 	var context = {};
 
-	pool.query('SELECT * FROM student', function(err, row, fields) {
+	pool.query('SELECT * FROM workouts', function(err, row, fields) {
 		if (err) {
 			next(err);
 			return;
 		}
 
-		context.results = JSON.stringify(rows);
+		context.results = JSON.stringify(row);
 		res.render('db');
 	});
 });
+
+app.post('/db', function(req, res, next) {
+	if (req.body.addItem) {
+		var context = {};
+		pool.query("INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES ? ([req.query.name], [req.query.reps], [req.query.weight], [req.query.date], [req.query.lbs])", 
+			function(err, result) {
+				if(err) {
+					next(err);
+					return;
+				}
+				pool.query('SELECT * FROM workouts', function(err, row, fields) {
+					if (err) {
+						next(err);
+						return;
+					}
+					context.results = JSON.stringify(row);
+				})
+			})	
+	}
+	
+
+})
 
 app.get('/reset-table',function(req,res,next){
   var context = {};
