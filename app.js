@@ -15,7 +15,7 @@ var pool = mysql.createPool({
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
-  extended: false
+	extended: false
 }));
 app.use(bodyParser.json());
 
@@ -48,42 +48,41 @@ app.get('/db', function(req, res, next) {
 });
 
 app.post('/db', function(req, res, next) {
-	if (req.body['addItem']) {
-		var context = {};
-		pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
-			function(err, result) {
-				if(err) {
-					next(err);
-					return;
-				}
-				pool.query('SELECT * FROM workouts', function(err, rows, fields) {
-					if (err) {
-						next(err);
-						return;
-					}
-					context.results = JSON.stringify(rows);
-				})
-			})	
-	}
-	
 
-})
+	var context = {};
+	// pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
+	pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result) if (err) {
+			next(err);
+			return;
+		}
+		pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+			if (err) {
+				next(err);
+				return;
+			}
+			context.results = rows;
 
-app.get('/reset-table',function(req,res,next){
-  var context = {};
-  pool.query("DROP TABLE IF EXISTS workouts", function(err){ //replace your connection pool with the your variable containing the connection pool
-    var createString = "CREATE TABLE workouts("+
-    "id INT PRIMARY KEY AUTO_INCREMENT,"+
-    "name VARCHAR(255) NOT NULL,"+
-    "reps INT,"+
-    "weight INT,"+
-    "date DATE,"+
-    "lbs BOOLEAN)";
-    pool.query(createString, function(err){
-      context.results = "Table reset";
-      res.render('db',context);
-    })
-  });
+			res.render('db', context);
+		});
+	});
+
+});
+
+app.get('/reset-table', function(req, res, next) {
+	var context = {};
+	pool.query("DROP TABLE IF EXISTS workouts", function(err) { //replace your connection pool with the your variable containing the connection pool
+		var createString = "CREATE TABLE workouts(" +
+			"id INT PRIMARY KEY AUTO_INCREMENT," +
+			"name VARCHAR(255) NOT NULL," +
+			"reps INT," +
+			"weight INT," +
+			"date DATE," +
+			"lbs BOOLEAN)";
+		pool.query(createString, function(err) {
+			context.results = "Table reset";
+			res.render('db', context);
+		})
+	});
 });
 
 
