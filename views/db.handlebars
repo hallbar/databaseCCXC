@@ -8,11 +8,10 @@
 	<input type="submit" name="addItem" value="Add Item">
 </form>
 
-{{#if result}}
+{{#if results}}
 <table>
 	<thead>
 		<tr>
-			<th><input type="hidden"></th>
 			<th>Name</th>
 			<th>Reps</th>
 			<th>Weight</th>
@@ -20,15 +19,17 @@
 			<th>lbs</th>
 		</tr>
 	</thead>
-	{{#each rows}}
-	<tr>
-		<td><input type="hidden" id="{{this.id}}</td>
-		<td>{{this.name}}</td>
-		<td>{{this.reps}}</td>
-		<td>{{this.weight}}</td>
-		<td>{{this.date}}</td>
-		<td>{{this.lbs}}</td>
-	</tr>
+	{{#each results}}
+	<tbody>
+		<tr>
+			<td>{{this.name}}</td>
+			<td>{{this.reps}}</td>
+			<td>{{this.weight}}</td>
+			<td>{{this.date}}</td>
+			<td>{{this.lbs}}</td>
+			<td>boo</td>
+		</tr>
 	{{/each}}
+	</tbody>
 </table>
 {{/if}}
