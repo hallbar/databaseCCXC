@@ -34,13 +34,13 @@ app.set('port', 3000);
 app.get('/db', function(req, res, next) {
 	var context = {};
 
-	pool.query('SELECT * FROM workouts', function(err, row, fields) {
+	pool.query('SELECT * FROM workouts', function(err, rows, fields) {
 		if (err) {
 			next(err);
 			return;
 		}
 
-		context.results = JSON.stringify(row);
+		context.results = JSON.stringify(rows);
 		res.render('db');
 	});
 });
@@ -48,18 +48,18 @@ app.get('/db', function(req, res, next) {
 app.post('/db', function(req, res, next) {
 	if (req.body['addItem']) {
 		var context = {};
-		pool.query("INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES ? ([req.query.name], [req.query.reps], [req.query.weight], [req.query.date], [req.query.lbs])", 
+		pool.query("INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES ? (req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs)", 
 			function(err, result) {
 				if(err) {
 					next(err);
 					return;
 				}
-				pool.query('SELECT * FROM workouts', function(err, row, fields) {
+				pool.query('SELECT * FROM workouts', function(err, rows, fields) {
 					if (err) {
 						next(err);
 						return;
 					}
-					context.results = JSON.stringify(row);
+					context.results = JSON.stringify(rows);
 				})
 			})	
 	}
