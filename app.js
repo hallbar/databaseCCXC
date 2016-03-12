@@ -13,6 +13,12 @@ var pool = mysql.createPool({
 	database: 'student'
 });
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(bodyParser.json());
+
 var createString = "CREATE TABLE workouts(" +
 	"id INT PRIMARY KEY AUTO_INCREMENT," +
 	"name VARCHAR(255) NOT NULL," +
@@ -40,7 +46,7 @@ app.get('/db', function(req, res, next) {
 });
 
 app.post('/db', function(req, res, next) {
-	if (req.body.addItem) {
+	if (req.body['addItem']) {
 		var context = {};
 		pool.query("INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES ? ([req.query.name], [req.query.reps], [req.query.weight], [req.query.date], [req.query.lbs])", 
 			function(err, result) {
