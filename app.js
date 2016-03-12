@@ -34,6 +34,8 @@ app.set('port', 3000);
 app.get('/db', function(req, res, next) {
 	var context = {};
 
+	// pool.query("'INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES (?)" ('foo', 10, 10, 2016-03-03, 1);
+
 	pool.query('SELECT * FROM workouts', function(err, rows, fields) {
 		if (err) {
 			next(err);
@@ -41,14 +43,14 @@ app.get('/db', function(req, res, next) {
 		}
 
 		context.results = JSON.stringify(rows);
-		res.render('db');
+		res.render('db', context);
 	});
 });
 
 app.post('/db', function(req, res, next) {
 	if (req.body['addItem']) {
 		var context = {};
-		pool.query("INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES ? (req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs)", 
+		pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
 			function(err, result) {
 				if(err) {
 					next(err);
