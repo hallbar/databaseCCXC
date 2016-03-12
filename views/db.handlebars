@@ -1,0 +1,16 @@
+<form method="post">
+	<input type="text" placeholder="Item" name="name" id="toDoName">
+	<input type="text" placeholder="Location" name="location" id="toDoLocation">
+	<input type="text" placeholder="Temperature" name="temperature" id="toDoTemp">
+	<input type="submit" name="Add Item" value="Add Item">
+</form>
+
+{{#if rows}}
+<ul>
+	{{#each rows}}
+	<li>
+		<h3>{{this}}</h3>
+	</li>
+	{{/each}}
+</ul>
+{{/if}}
