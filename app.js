@@ -51,27 +51,29 @@ app.get('/db', function(req, res, next) {
 
 app.post('/db', function(req, res, next) {
 
-	// if (req.body.addItem) {
-		var context = {};
-		pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result){
-		// pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result) {
+	if (req.body.addItem) {
+	var context = {};
+	// pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result) {
+	pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result) {
+		if (err) {
+			next(err);
+			return;
+		}
+		pool.query('SELECT * FROM workouts', function(err, rows, fields) {
 			if (err) {
 				next(err);
 				return;
 			}
-			pool.query('SELECT * FROM workouts', function(err, rows, fields) {
-				if (err) {
-					next(err);
-					return;
-				}
-				console.log(rows);
-				context.results = rows;
+			console.log(rows);
+			context.results = rows;
 
-				res.render('db', context);
-			});
+			res.render('db', context);
 		});
-	// }
-
+	});
+	} else if (req.body.edit.slice(10, 14) === 'edit') {
+		pool.query('SELECT * FROM workouts WHERE id=' + req.body.edit.slice(14,));
+		context.results = rows;
+		res.render('edit', context);
 	}
 
 });
