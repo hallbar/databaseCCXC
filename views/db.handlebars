@@ -12,7 +12,6 @@
 <table>
 	<thead>
 		<tr>
-			<th><input type="hidden"></th>
 			<th>Name</th>
 			<th>Reps</th>
 			<th>Weight</th>
@@ -21,13 +20,17 @@
 		</tr>
 	</thead>
 	{{#each results}}
-	<tr>
-		<td>{{this.name}}</td>
-		<td>{{this.reps}}</td>
-		<td>{{this.weight}}</td>
-		<td>{{this.date}}</td>
-		<td>{{this.lbs}}</td>
+	<tbody>
+		<tr>
+			<td>{{this.name}}</td>
+			<td>{{this.reps}}</td>
+			<td>{{this.weight}}</td>
+			<td>{{this.date}}</td>
+			<td>{{this.lbs}}</td>
+			<td>boo</td>
+		</tr>
 	</tr>
 	{{/each}}
+	</tbody>
 </table>
 {{/if}}

@@ -42,7 +42,7 @@ app.get('/db', function(req, res, next) {
 			return;
 		}
 
-		context.results = JSON.stringify(rows);
+		context.results = rows;
 		res.render('db', context);
 	});
 });
@@ -62,6 +62,7 @@ app.post('/db', function(req, res, next) {
 					next(err);
 					return;
 				}
+				console.log(rows);
 				context.results = rows;
 
 				res.send(context);
