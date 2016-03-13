@@ -1,7 +1,7 @@
 {{#if results}}
 {{#each results}}
 <form method="post">
-	<input type="hidden" name="{{this.id}}" id="id" />
+	<input type="hidden" name="{{this.id}}" id="id" placeholder="{{this.id}}" />
 	<input type="text" name="name" id="name" placeholder="{{this.name}}">
 	<input type="text" name="reps" id="reps" placeholder="{{this.reps}}">
 	<input type="text" name="weight" id="weight" placeholder="{{this.weight}}">
