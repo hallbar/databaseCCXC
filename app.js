@@ -92,8 +92,14 @@ app.post('/edit', function(req, res, next) {
 				next(err);
 				return;
 			}
-			context.results = rows;
-			res.render('db', context);
+			pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+				if (err) {
+					next(err);
+					return;
+				}
+				context.results = rows;
+				res.render('db', context);
+			});
 		});
 });
 
