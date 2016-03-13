@@ -86,21 +86,38 @@ app.get('/edit', function(req, res, next) {
 
 app.post('/edit', function(req, res, next) {
 	var context = {};
-	pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs, req.body.id],
-		function(err, rows, fields) {
+	console.log(req.body.id);
+	if (req.body.name) {
+		pool.query("UPDATE workouts SET name=? WEHRE id=?", [req.body.name, req.body.id], function(err, rows, fields) {
 			if (err) {
 				next(err);
 				return;
 			}
-			pool.query('SELECT * FROM workouts', function(err, rows, fields) {
-				if (err) {
-					next(err);
-					return;
-				}
-				context.results = rows;
-				res.render('db', context);
-			});
 		});
+	}
+	if (req.body.reps) {
+		pool.query("UPDATE workouts SET reps=? WHERE id=?", [req.body.reps, req.body.id], function(err, rows, fields) {
+			if (err) {
+				next(err);
+				return;
+			}
+		})
+	}
+	// pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs, req.body.id],
+	// 	function(err, rows, fields) {
+	// 		if (err) {
+	// 			next(err);
+	// 			return;
+	// 		}
+	pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+		if (err) {
+			next(err);
+			return;
+		}
+		context.results = rows;
+		res.render('db', context);
+	});
+	// });
 });
 
 app.get('/reset-table', function(req, res, next) {
