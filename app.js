@@ -65,10 +65,10 @@ app.post('/db', function(req, res, next) {
 				console.log(rows);
 				context.results = rows;
 
-				res.send(context);
+				res.render('db', context);
 			});
 		});
-	}
+	} else if ()
 
 });
 
