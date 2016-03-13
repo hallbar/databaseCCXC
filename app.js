@@ -50,37 +50,45 @@ app.get('/db', function(req, res, next) {
 app.post('/db', function(req, res, next) {
 
 	if (req.body.addItem) {
-	var context = {};
-	// pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result) {
-	pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result) {
-		if (err) {
-			next(err);
-			return;
-		}
-		pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+		var context = {};
+		// pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.query.name, req.query.reps, req.query.weight, req.query.date, req.query.lbs], function(err, result) {
+		pool.query("INSERT INTO workouts (`name`, `reps`, `weight`, `date`, `lbs`) VALUES (?, ?, ?, ?, ?)", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], function(err, result) {
 			if (err) {
 				next(err);
 				return;
 			}
-			console.log(rows);
-			context.results = rows;
+			pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+				if (err) {
+					next(err);
+					return;
+				}
+				console.log(rows);
+				context.results = rows;
 
-			res.render('db', context);
+				res.render('db', context);
+			});
 		});
-	});
-	} else if (req.body.edit) {
-		pool.query('SELECT * FROM workouts WHERE id=' + req.body.id);
+	}
+});
+
+app.get('/edit', function(req, res, next) {
+	var context = {};
+	pool.query("SELECT * FROM workouts WHERE id=" + req.query.id, function(err, rows, fields) {
+		if (err) {
+			next(err);
+			return;
+		}
 		context.results = rows;
 		res.render('edit', context);
-	}
+	});
 
 });
 
 app.post('/edit', function(req, res, next) {
 	var context = {};
-	pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], 
+	pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs, req.body.id],
 		function(err, rows, fields) {
-			if(err) {
+			if (err) {
 				next(err);
 				return;
 			}

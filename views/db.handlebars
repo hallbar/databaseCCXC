@@ -27,13 +27,11 @@
 			<td>{{this.weight}}</td>
 			<td>{{this.date}}</td>
 			<td>{{this.lbs}}</td>
-			<td><input type="hidden" name="{{this.id}}" id="edit"/><input type="submit" name="edit" value="Edit" /></td>
-			<td><input type="hidden" name="{{this.id}}" id="delete"><input type="submit" name="delete" value="Delete" /></td>
+			<td><a href="/edit?id={{this.id}}"><button>Edit</button></a></td>
+			<td><a href="/delete?id={{this.id}}"><button>Delete</button></a></td>
 		</tr>
 	</tr>
 	{{/each}}
 	</tbody>
 </table>
 {{/if}}
-
-<script src="/static/js/script.js" />
