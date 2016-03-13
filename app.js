@@ -36,8 +36,6 @@ app.use('/static', express.static('public'));
 app.get('/db', function(req, res, next) {
 	var context = {};
 
-	// pool.query("'INSERT INTO workouts ('name', 'reps', 'weight', 'date', 'lbs') VALUES (?)" ('foo', 10, 10, 2016-03-03, 1);
-
 	pool.query('SELECT * FROM workouts', function(err, rows, fields) {
 		if (err) {
 			next(err);
@@ -70,12 +68,25 @@ app.post('/db', function(req, res, next) {
 			res.render('db', context);
 		});
 	});
-	} else if (req.body.edit.slice(10, 14) === 'edit') {
-		pool.query('SELECT * FROM workouts WHERE id=' + req.body.edit.slice(14,));
+	} else if (req.body.edit) {
+		pool.query('SELECT * FROM workouts WHERE id=' + req.body.id);
 		context.results = rows;
 		res.render('edit', context);
 	}
 
+});
+
+app.post('/edit', function(req, res, next) {
+	var context = {};
+	pool.query("UPDATE workouts SET name=?, reps=?, weight=?, date=?, lbs=? WHERE id=? ", [req.body.name, req.body.reps, req.body.weight, req.body.date, req.body.lbs], 
+		function(err, rows, fields) {
+			if(err) {
+				next(err);
+				return;
+			}
+			context.results = rows;
+			res.render('db', context);
+		});
 });
 
 app.get('/reset-table', function(req, res, next) {
