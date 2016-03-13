@@ -147,6 +147,24 @@ app.post('/edit', function(req, res, next) {
 	// });
 });
 
+app.get('/delete', function(req, res, next) {
+	var context = {};
+	pool.query("DELETE FROM workouts WHERE id=?", [req.query.id], function(err, rows, fields) {
+		if (err) {
+			next(err);
+			return;
+		}
+		pool.query('SELECT * FROM workouts', function(err, rows, fields) {
+			if(err) {
+				next(err);
+				return;
+			}
+			context.results = rows;
+			res.render('db', context);
+		});
+	});
+});
+
 app.get('/reset-table', function(req, res, next) {
 	var context = {};
 	pool.query("DROP TABLE IF EXISTS workouts", function(err) { //replace your connection pool with the your variable containing the connection pool
