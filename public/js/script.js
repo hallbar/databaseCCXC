@@ -15,6 +15,7 @@ document.getElementById('addItem').addEventListener(click, function(event) {
 	payload.reps = document.getElementById('lbs').value;
 
 	req.open('POST', 'http://localhost:3000', false);
+	req.setRequestHeader('Content-Type', 'application/JSON');
 	req.send(JSON.stringify(payload));
 	var response = JSON.parse(req.responseText);
 });
